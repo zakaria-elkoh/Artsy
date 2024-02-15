@@ -61,7 +61,6 @@
                                     @method('DELETE')
                                     <button class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Delete</button>
                                 </form>
-                                {{-- <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Delete</a> --}}
                             </td>
                         </tr>
                     @endforeach
