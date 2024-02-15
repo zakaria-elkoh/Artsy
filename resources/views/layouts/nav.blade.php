@@ -20,9 +20,11 @@
                 <li>
                     <a href="/" class="text-white block py-2 px-3 bg-blue-700 hover:text-blue-400 rounded md:bg-transparent md:p-0 " >Home</a>
                 </li>
-                <li>
-                    <a href="{{route('projects.create')}}" class="text-white block mb-8 md:mb-0 py-2 px-3 rounded hover:text-blue-400 hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0">Add a Project</a>
-                </li>
+                @can('is_admin_or_partner')
+                    <li>
+                        <a href="{{route('projects.create')}}" class="text-white block mb-8 md:mb-0 py-2 px-3 rounded hover:text-blue-400 hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0">Add a Project</a>
+                    </li>
+                @endcan
                 {{-- check if the user logged in --}}
                 @if (Auth::check())
                     {{-- check if the user is admin --}}
@@ -38,9 +40,11 @@
                         <a href="{{route('register')}}" class="text-white bg-blue-700 focus:outline-none hover:bg-blue-800 focus:ring-4 font-medium rounded-full text-sm px-4 py-2.5 me-2 mb-2">Get Started</a>
                     </li>
                 @else
+                @can('is_admin')
                     <li>
                         <a href="{{route('admin.dashboard.users')}}" class="text-white block mb-8 md:mb-0 py-2 px-3 rounded hover:text-blue-400 hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0">Dashboard</a>
                     </li>
+                @endcan
                     <li>
                         {{-- <a href="{{route('logout')}}" class="text-white bg-red-700 focus:outline-none hover:bg-red-800 focus:ring-4 font-medium rounded-full text-sm px-4 py-2.5 me-2 mb-2">Log Out</a> --}}
                     </li>

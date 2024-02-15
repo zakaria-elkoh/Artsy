@@ -10,6 +10,7 @@
 @include('layouts.aside')
 
 <div class="p-4 sm:ml-64">
+    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Our Projects:</h5>
     <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700">
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
             
@@ -22,10 +23,13 @@
                             Id
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            name
+                            title
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            created at
+                            description
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Partner Name
                         </th>
                         <th scope="col" class="py-3">
                             Action
@@ -34,22 +38,30 @@
                 </thead>
 
                 <tbody>
-                    <?php foreach($partners as $partner) : ?>
+                    @foreach($projects as $project)
                         <tr class="odd:bg-white text-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
                             <th class="px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
-                                {{$partner->id}}
+                                {{$project->id}}
                             </th>
                             <th class="px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
-                                {{$partner->company_name}}
+                                {{$project->title}}
                             </th>
                             <td class="px-6 py-4">
-                                {{$partner->created_at}}
+                                {{$project->description}}
+                            </td>
+                            <td class="px-6 py-4">
+                                {{$project->partner->company_name}}
                             </td>
                             <td class="py-4">
-                                <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Delete</a>
+                                <form action="{{ route('projects.destroy', $project->id) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Delete</button>
+                                </form>
+                                <a href="{{route('projects.edit', $project->id)}}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
                             </td>
                         </tr>
-                    <?php endforeach ?>
+                    @endforeach
                 </tbody>
                 
             </table>

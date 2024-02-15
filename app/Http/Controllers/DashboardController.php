@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Project;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -61,5 +62,21 @@ class DashboardController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function trash()
+    {
+
+        // trashed projects
+        $trashed_projects = Project::onlyTrashed()
+        ->orderBy('deleted_at', 'desc')
+        ->get();
+        
+        // trashed users
+        $trashed_users = User::onlyTrashed()
+        ->orderBy('deleted_at', 'desc')
+        ->get();
+
+        return view('admin.dashboard.trash', compact('trashed_projects', 'trashed_users'));
     }
 }

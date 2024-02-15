@@ -37,7 +37,7 @@
                 </thead>
 
                 <tbody>
-                    <?php foreach($projects as $project) : ?>
+                    @foreach($projects as $project)
                         <tr class="odd:bg-white text-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
                             <th class="px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
                                 {{$project->id}}
@@ -48,14 +48,19 @@
                             <td class="px-6 py-4">
                                 {{$project->description}}
                             </td>
-                            <td class="px-6 py-4">
+                            {{-- <td class="px-6 py-4">
                                 {{$project->partner->company_name}}
-                            </td>
+                            </td> --}}
                             <td class="py-4">
-                                <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Delete</a>
+                                <form action="{{ route('projects.destroy', $project->id) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Delete</button>
+                                </form>
+                                <a href="{{route('projects.edit', $project->id)}}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
                             </td>
                         </tr>
-                    <?php endforeach ?>
+                    @endforeach
                 </tbody>
                 
             </table>

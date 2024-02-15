@@ -5,9 +5,12 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PartnerController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\Admin\ProjectController as AdminProjectController;
+use App\Http\Controllers\Partner\ProjectController as PartnerProjectController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,27 +23,27 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [HomeController::class, 'index']);
+Route::get('/partner/projects', [PartnerProjectController::class, 'index'])->name('partner.projects');
+
+Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/home', [HomeController::class, 'index']);
 
-// 
-Route::get('/projects/create', [ProjectController::class, 'create'])->name('projects.create');
-Route::post('/projects/store', [ProjectController::class, 'store'])->name('projects.store');
+// projects routes
+Route::get('projects/restore/{id}', [ProjectController::class, 'restore'])->name('projects.restore');
+Route::post('projects/collaborate/{project}', [ProjectController::class, 'collaborate'])->name('projects.collaborate');
+Route::post('projects/uncollaborate/{id}', [ProjectController::class, 'uncollaborate'])->name('projects.uncollaborate');
+Route::resource('projects', ProjectController::class);
 
 // admin
-Route::middleware('auth')->group(function() {
+Route::middleware(['admin.check', 'auth'])->group(function () {
     Route::get('/admin/dashboard/users', [UserController::class, 'index'])->name('admin.dashboard.users');
     Route::get('/admin/dashboard/projects', [ProjectController::class, 'index'])->name('admin.dashboard.projects');
-    Route::get('/admin/dashboard/partners', [PartnerController::class, 'index'])->name('admin.dashboard.partners');
+    Route::get('/admin/dashboard/trash', [DashboardController::class, 'trash'])->name('admin.dashboard.trash');
 });
 
-
-
-Route::get('/ss', function () {
-    return view('welcome');
-});
-
-Route::get('/user', [UserController::class, 'index'])->name('user');
+// users route
+Route::get('users/restore/{id}', [UserController::class, 'restore'])->name('users.restore');
+Route::resource('users', UserController::class);
 
 Route::get('/dashboard', function () {
     return view('dashboard');

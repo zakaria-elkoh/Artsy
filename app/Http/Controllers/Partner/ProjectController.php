@@ -1,19 +1,21 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Partner;
 
-use App\Models\Partner;
+use App\Http\Controllers\Controller;
+use App\Models\Project;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
-class PartnerController extends Controller
+class ProjectController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $partners = Partner::all();
-        return view('admin.dashboard.partners', compact('partners'));
+        $projects = Project::where('partner_id', Auth::user()->id)->get();
+        return view('admin.dashboard.projects', compact('projects'));
     }
 
     /**
@@ -35,7 +37,7 @@ class PartnerController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Partner $partner)
+    public function show(string $id)
     {
         //
     }
@@ -43,7 +45,7 @@ class PartnerController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Partner $partner)
+    public function edit(string $id)
     {
         //
     }
@@ -51,7 +53,7 @@ class PartnerController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Partner $partner)
+    public function update(Request $request, string $id)
     {
         //
     }
@@ -59,7 +61,7 @@ class PartnerController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Partner $partner)
+    public function destroy(string $id)
     {
         //
     }

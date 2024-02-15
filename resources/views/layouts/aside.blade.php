@@ -24,23 +24,6 @@
                     <span class="flex-1 ms-3 whitespace-nowrap">Users</span>
                 </a>
             </li>
-        {{-- </li> --}}
-            {{-- <li class="rounded-lg>
-                <a href="{{route('admin.dashboard.projects')}}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                    <span class="material-symbols-outlined">
-                        menu_book
-                    </span>
-                    <span class="flex-1 ms-3 whitespace-nowrap">Projects</span>
-                </a>
-            </li> --}}
-            <li class="rounded-lg">
-                <a href="{{route('admin.dashboard.partners')}}" class="{{Route::is('admin.dashboard.partners') ? 'bg-gray-700' : ''}} flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                    <span class="material-symbols-outlined">
-                        category
-                    </span>
-                    <span class="flex-1 ms-3 whitespace-nowrap">Partners</span>
-                </a>
-            </li>
             <li class="rounded-lg">
                 <a href="{{route('admin.dashboard.projects')}}" class="{{Route::is('admin.dashboard.projects') ? 'bg-gray-700' : ''}} flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                     <span class="material-symbols-outlined">
@@ -48,6 +31,15 @@
                     </span>
                     <span class="flex-1 ms-3 whitespace-nowrap">Projects</span>
                 </a>
+            </li>
+            <li class="rounded-lg">
+                <a href="{{route('admin.dashboard.trash')}}" class="{{Route::is('admin.dashboard.trash') ? 'bg-gray-700' : ''}} flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                    <span class="material-symbols-outlined">
+                        delete_sweep
+                    </span>
+                    <span class="flex-1 ms-3 whitespace-nowrap">Trash</span>
+                </a>
+            </li>
             <li>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf

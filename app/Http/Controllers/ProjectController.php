@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProjectRequest;
 use App\Models\Project;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class ProjectController extends Controller
 {
@@ -13,8 +16,8 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        $projects = Project::with('partner')->get();
-        return view('admin.dashboard.projects', compact('projects')); 
+        $projects = Project::all();
+        return view('admin.dashboard.projects', compact('projects'));
     }
 
     /**
@@ -22,7 +25,16 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        return view('project.create');
+        Gate::authorize('is_admin_or_partner');
+
+        $usersWithPartnerRole = User::whereHas('roles', function ($query) {
+            $query->where('name', 'partner');
+        })->get();
+        $usersWithArtistRole = User::whereHas('roles', function ($query) {
+            $query->where('name', 'artist');
+        })->get();
+
+        return view('project.create', compact('usersWithPartnerRole', 'usersWithArtistRole'));
     }
 
     /**
@@ -30,7 +42,11 @@ class ProjectController extends Controller
      */
     public function store(StoreProjectRequest $request)
     {
+
+        dd($request->all());
+
         Project::create($request->all());
+        // Project::create();
         return redirect('/');
     }
 
@@ -45,24 +61,53 @@ class ProjectController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Project $project)
     {
-        //
+        Gate::authorize('update_project', $project);
+        return view('project.edit', compact('project'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Project $project)
     {
-        //
+        Gate::authorize('update_project', $project);
+        $project->update($request->all());
+        return redirect()->route('admin.dashboard.projects');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Project $project)
     {
-        //
+        $project->delete();
+
+        return redirect()->route('admin.dashboard.projects');
+    }
+
+    public function restore($id)
+    {
+        $project = Project::withTrashed()->findOrFail($id);
+        $project->restore();
+
+        return redirect()->route('admin.dashboard.trash');
+    }
+
+    public function collaborate(Project $project)
+    {
+        // $project = Project::findOrFail($project_id);
+        $project->users()->attach(Auth::user());
+
+        return redirect()->back();
+    }
+
+    public function uncollaborate($project_id)
+    {
+        $project = Project::findOrFail($project_id);
+        $project->users()->detach(Auth::user());
+
+        return redirect()->back();
     }
 }

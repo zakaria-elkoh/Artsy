@@ -12,13 +12,10 @@
     </div>
 </header>
 
-@dd(Auth::user())
-
 <section class="projects py-16">
     <div class="container mx-auto">
         <h1 class="text-white text-4xl font-bold mb-7">Current Projects:</h1>
         <div class="projects-wrapper grid grid-cols-3 gap-6">
-
             @foreach ($projects as $project)
                 <div  class="book flex flex-col items-center bg-[#333] border border-gray-600 rounded-lg shadow md:flex-row md:max-w-xl">
                     <img class="object-cover w-full rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-s-lg" src="{{asset('images/project-1.webp')}}" alt="img">
@@ -38,16 +35,27 @@
                         @if (Auth::check())
                             @if (Auth::user()->role_id == 1)
                                 <div class="mt-4">
-                                    <a href="{{route('book.delete', $book->id)}}" class="hover:underline">delete</a>
-                                    <a href="{{route('book.edit', $book->id)}}" class="hover:underline ml-4">edit</a>
+                                    <a href="{{route('book.delete', $project->id)}}" class="hover:underline">delete</a>
+                                    <a href="{{route('book.edit', $project->id)}}" class="hover:underline ml-4">edit</a>
                                 </div>
                             @endif
                         @endif
-                        <a href="#" class="text-white w-fit ms-auto mt-6 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Collaborate</a>
+                        @can('is_artist')
+                            @if (!$project->users->contains(auth()->id()))
+                                <form action="{{route('projects.collaborate', $project->id)}}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="text-white w-fit ms-auto mt-6 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Collaborate</button>
+                                </form>
+                            @else
+                                <form action="{{route('projects.uncollaborate', $project->id)}}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="text-white w-fit ms-auto mt-6 bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Uncollaborate</button>
+                                </form>
+                            @endif
+                        @endcan
                     </div>
-                </div>                
+                </div>
             @endforeach
-
         </div>
     </div>
 </section>
