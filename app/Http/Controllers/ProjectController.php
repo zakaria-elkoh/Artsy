@@ -43,10 +43,12 @@ class ProjectController extends Controller
     public function store(StoreProjectRequest $request)
     {
 
-        dd($request->all());
+        // dd($request->all());
 
-        Project::create($request->all());
-        // Project::create();
+        $project = Project::create($request->all());
+
+        $project->users()->attach($request->artists);
+
         return redirect('/');
     }
 
@@ -97,7 +99,6 @@ class ProjectController extends Controller
 
     public function collaborate(Project $project)
     {
-        // $project = Project::findOrFail($project_id);
         $project->users()->attach(Auth::user());
 
         return redirect()->back();
