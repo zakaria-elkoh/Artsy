@@ -22,16 +22,7 @@
                     <div class="text-white flex flex-col justify-between p-4 leading-normal">
                         <h5 class="mb-2 text-2xl font-bold tracking-tight">{{$project->title}}</h5>
                         <p class="mb-3 font-normal text-gray-200">{{$project->description}}</p>
-                        {{-- <ul class="flex text-sm">
-                            <li class="me-2">
-                                <span class="text-xl font-bold text-gray-200">{{$book->total_copies}}</span>
-                                <span class="text-gray-400">Total</span>
-                            </li>
-                            <li>
-                                <span class="text-xl font-bold text-gray-200">{{$book->available_copies}}</span>
-                                <span class="text-gray-400">Available</span>
-                            </li>
-                        </ul> --}}
+
                         @if (Auth::check())
                             @if (Auth::user()->role_id == 1)
                                 <div class="mt-4">

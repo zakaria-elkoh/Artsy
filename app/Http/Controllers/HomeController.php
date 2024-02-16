@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Project;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -13,6 +14,13 @@ class HomeController extends Controller
     public function index()
     {
         $projects = Project::all();
+
+        $projects = Project::withCount('users')->orderBy('users_count', 'DESC')->first();
+        //  dd($projects);
+
+        // $artist = new User();
+        // $artist->projects()->exists();
+
         return view('index', compact('projects'));
     }
 
